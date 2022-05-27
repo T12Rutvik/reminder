@@ -232,9 +232,9 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                   padding: const EdgeInsets.only(
                       left: 35, bottom: 42, right: 35, top: 18),
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (widget.isUpdate!) {
-                        model.updateData();
+                        await model.updateData();
                       } else {
                         model.addData();
                       }

@@ -9,16 +9,17 @@ class SetTimerViewModel extends BaseModel {
   TextEditingController noteController = TextEditingController();
   DateTime? selectedDate;
   DateTime? time;
+
   //
   bool isOn = false;
   DateFormat formatter = DateFormat.yMMMMd('en_US');
+
   //
   final database = FirebaseDatabase.instance.reference();
   FirebaseAuth auth = FirebaseAuth.instance;
-  //
 
+  //
   addData() {
-    /* updateUI(); */
     database.child('reminder').push().set({
       'title': titleController.text,
       'note': noteController.text,
@@ -33,48 +34,21 @@ class SetTimerViewModel extends BaseModel {
     updateUI();
   }
 
-  updateData() {
-    /*List<ReminderData> reminderList = [];
+  updateData() async {
     dynamic data;
-    database.child('reminder').onValue.listen((value) {
-      reminderList.clear();
+    String reminderId = "1653627618482";
+    String? reminderKey;
+    await database.child("reminder").once().then((value) {
       data = value.snapshot.value;
       data.forEach((key, value) {
-        reminderList.add(
-          ReminderData(
-            title: value['title'],
-            note: value['note'],
-            date: value['date'],
-            time: value['time'],
-          ),
-        );
-      });
-      updateUI();
-    });*/
-    dynamic data;
-    database.child("reminder").once().then((value) {
-      data = value.snapshot.value;
-      data.forEach((key, value) {
-        database.child("reminder").child(key).once().then((value) {
-          data = value.snapshot.value;
-          data.forEach((key, value) {
-            print(key);
-            /*database.child(key).update({
-              'title': titleController.text,
-              'note': noteController.text,
-              'date': selectedDate == null
-                  ? DateTime.now().toString().split(' ')[0]
-                  : selectedDate.toString().split(' ')[0],
-              'time': time == null
-                  ? DateTime.now().toString().split(' ')[1].split('.')[0]
-                  : time.toString().split(' ')[1].split('.')[0],
-            });*/
-          });
-        });
-        // database.child("reminder").child(value).child
+        if (reminderId == value['id']) {
+          reminderKey = key;
+          print(reminderKey);
+        }
       });
     });
-    /* database.child('reminder').child("-N2z5hh-eq3Cxl5vzwzQ").update({
+    print(reminderKey);
+    database.child("reminder").child(reminderKey!).update({
       'title': titleController.text,
       'note': noteController.text,
       'date': selectedDate == null
@@ -82,7 +56,7 @@ class SetTimerViewModel extends BaseModel {
           : selectedDate.toString().split(' ')[0],
       'time': time == null
           ? DateTime.now().toString().split(' ')[1].split('.')[0]
-          : time.toString().split(' ')[1].split('.')[0],
-    });*/
+          : time.toString().split(' ')[1].split('.')[0]
+    });
   }
 }
