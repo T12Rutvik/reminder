@@ -21,11 +21,11 @@ class HomeViewModel extends BaseModel {
       data.forEach((key, value) {
         reminderList.add(
           ReminderData(
-            title: value['title'],
-            note: value['note'],
-            date: value['date'],
-            time: value['time'],
-          ),
+              title: value['title'],
+              note: value['note'],
+              date: value['date'],
+              time: value['time'],
+              id: value['id']),
         );
       });
       updateUI();

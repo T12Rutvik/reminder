@@ -3,13 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:reminder/core/view_model/base_view.dart';
 
+import '../core/model/home_model.dart';
 import '../core/view_model/set_timer_model/set_timer_screen_model.dart';
 
 class SetTimerScreen extends StatefulWidget {
-  bool? title;
-  String? reminderId;
+  ScreenArguments? screenArguments;
 
-  SetTimerScreen({Key? key, this.title, this.reminderId}) : super(key: key);
+  SetTimerScreen({Key? key, this.screenArguments}) : super(key: key);
 
   @override
   State<SetTimerScreen> createState() => _SetTimerScreenState();
@@ -20,13 +20,18 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+
     return BaseView<SetTimerViewModel>(
       builder: (buildContext, model, child) {
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
             title: Text(
-              widget.title! ? "Update Reminder" : "Create Reminder",
+              // args.title,
+              widget.screenArguments!.isUpdate!
+                  ? "Update Reminder"
+                  : "Create Reminder",
               style: TextStyle(color: Colors.grey.shade800),
             ),
             elevation: 0.4,
@@ -230,8 +235,9 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                       left: 35, bottom: 42, right: 35, top: 18),
                   child: ElevatedButton(
                     onPressed: () async {
-                      if (widget.title!) {
-                        await model.updateData(widget.reminderId);
+                      if (widget.screenArguments!.isUpdate!) {
+                        await model
+                            .updateData(widget.screenArguments!.reminderId);
                       } else {
                         model.addData();
                       }
@@ -248,12 +254,16 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(widget.title! ? null : Icons.add),
+                        Icon(widget.screenArguments!.isUpdate!
+                            ? null
+                            : Icons.add),
                         const SizedBox(
                           width: 10,
                         ),
                         Text(
-                          widget.title! ? "Update Reminder" : "Create Reminder",
+                          widget.screenArguments!.isUpdate!
+                              ? "Update Reminder"
+                              : "Create Reminder",
                           style: const TextStyle(fontSize: 20),
                         ),
                       ],
@@ -267,10 +277,6 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
       },
       onModelReady: (model) async {
         this.model = model;
-
-        if (kDebugMode) {
-          print(widget.title);
-        }
       },
     );
   }

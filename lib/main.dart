@@ -22,7 +22,7 @@ class Myapp extends StatefulWidget {
 class _MyappState extends State<Myapp> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: Routes.splashScreen,
       onGenerateRoute: PageRouter.generateRoutes,

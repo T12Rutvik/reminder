@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reminder/core/model/home_model.dart';
 import 'package:reminder/core/view_model/base_view.dart';
 import 'package:reminder/core/view_model/home_view_model/home_screen_model.dart';
 
@@ -24,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.pushNamed(
                 context,
                 Routes.setTimerScreen,
-                arguments: false,
+                arguments: ScreenArguments(isUpdate: false),
               );
             },
             backgroundColor: const Color(0xFF9d2fc6),
@@ -78,8 +79,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             GestureDetector(
                               onTap: () {
                                 Navigator.pushNamed(
-                                    context, Routes.setTimerScreen,
-                                    arguments: true);
+                                  context,
+                                  Routes.setTimerScreen,
+                                  arguments: ScreenArguments(
+                                      isUpdate: true,
+                                      reminderId: model.reminderList
+                                          .elementAt(index)
+                                          .id),
+                                );
                               },
                               child: Container(
                                 width: double.infinity,

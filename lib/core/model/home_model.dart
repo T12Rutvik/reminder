@@ -1,23 +1,22 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-
 class ReminderData {
   String? note;
   String? title;
   String? date;
   String? time;
-  ReminderData({this.note, this.title, this.date, this.time});
+  String? id;
+  ReminderData({this.note, this.title, this.date, this.time, this.id});
 }
 
 class ScreenArguments {
-  final String title;
-  final String reminderId;
+  bool? isUpdate;
+  String? reminderId;
 
-  ScreenArguments(this.title, this.reminderId);
+  ScreenArguments({this.isUpdate, this.reminderId});
 }
 
 //
 //
+/*
 class ExtractArgumentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -55,3 +54,4 @@ class PassArgumentsScreen extends StatelessWidget {
     );
   }
 }
+*/

@@ -4,6 +4,7 @@ import 'package:reminder/core/routing/routes.dart';
 import '../../ui/home_screen.dart';
 import '../../ui/set_timer_screen.dart';
 import '../../ui/splash_screen.dart';
+import '../model/home_model.dart';
 
 class PageRouter {
   static Route<dynamic> generateRoutes(RouteSettings settings) {
@@ -13,10 +14,10 @@ class PageRouter {
       case Routes.homeScreen:
         return MaterialPageRoute(builder: (context) => const HomeScreen());
       case Routes.setTimerScreen:
-        bool isUpdate = settings.arguments as bool;
+        ScreenArguments screenArguments = settings.arguments as ScreenArguments;
         return MaterialPageRoute(
             builder: (context) => SetTimerScreen(
-                  title: isUpdate,
+                  screenArguments: screenArguments,
                 ));
       default:
         return MaterialPageRoute(builder: (context) {
