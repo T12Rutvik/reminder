@@ -3,37 +3,21 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:reminder/core/view_model/base_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SetTimerViewModel extends BaseModel {
   TextEditingController titleController = TextEditingController();
   TextEditingController noteController = TextEditingController();
   DateTime? selectedDate;
   DateTime? time;
-  int id = 0;
-
   //
   bool isOn = false;
   DateFormat formatter = DateFormat.yMMMMd('en_US');
-
   //
   final database = FirebaseDatabase.instance.reference();
   FirebaseAuth auth = FirebaseAuth.instance;
-
   //
-  storeUid() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setInt('Uid', id);
-  }
-
-  getUid() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    int? idd = preferences.getInt('Uid');
-    id = idd!;
-  }
 
   addData() {
-    id++;
     /* updateUI(); */
     database.child('reminder').push().set({
       'title': titleController.text,
@@ -44,8 +28,9 @@ class SetTimerViewModel extends BaseModel {
       'time': time == null
           ? DateTime.now().toString().split(' ')[1].split('.')[0]
           : time.toString().split(' ')[1].split('.')[0],
-      'id': "rm-$id",
+      'id': DateTime.now().millisecondsSinceEpoch.toString(),
     });
+    updateUI();
   }
 
   updateData() {
@@ -70,16 +55,23 @@ class SetTimerViewModel extends BaseModel {
     database.child("reminder").once().then((value) {
       data = value.snapshot.value;
       data.forEach((key, value) {
-        database.child("reminder").child(key).update({
-          'title': titleController.text,
-          'note': noteController.text,
-          'date': selectedDate == null
-              ? DateTime.now().toString().split(' ')[0]
-              : selectedDate.toString().split(' ')[0],
-          'time': time == null
-              ? DateTime.now().toString().split(' ')[1].split('.')[0]
-              : time.toString().split(' ')[1].split('.')[0],
+        database.child("reminder").child(key).once().then((value) {
+          data = value.snapshot.value;
+          data.forEach((key, value) {
+            print(key);
+            /*database.child(key).update({
+              'title': titleController.text,
+              'note': noteController.text,
+              'date': selectedDate == null
+                  ? DateTime.now().toString().split(' ')[0]
+                  : selectedDate.toString().split(' ')[0],
+              'time': time == null
+                  ? DateTime.now().toString().split(' ')[1].split('.')[0]
+                  : time.toString().split(' ')[1].split('.')[0],
+            });*/
+          });
         });
+        // database.child("reminder").child(value).child
       });
     });
     /* database.child('reminder').child("-N2z5hh-eq3Cxl5vzwzQ").update({

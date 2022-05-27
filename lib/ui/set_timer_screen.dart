@@ -274,8 +274,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
       },
       onModelReady: (model) async {
         this.model = model;
-        await model.storeUid();
-        await model.getUid();
+
         if (kDebugMode) {
           print(widget.isUpdate);
         }
