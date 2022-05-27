@@ -88,6 +88,7 @@ class _HomeScreenState extends State<HomeScreen>
                                           .elementAt(index)
                                           .id),
                                 );
+                                model.showNotification();
                               },
                               child: Container(
                                 width: double.infinity,
@@ -252,7 +253,6 @@ class _HomeScreenState extends State<HomeScreen>
       onModelReady: (model) async {
         this.model = model;
         model.localNotification();
-        model.showNotification();
         model.readData();
       },
     );

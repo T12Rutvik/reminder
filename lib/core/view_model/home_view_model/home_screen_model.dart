@@ -64,7 +64,11 @@ class HomeViewModel extends BaseModel {
 
   localNotification() {
     var androidSetting = const AndroidInitializationSettings("app_icon");
-    var iosSettings = const IOSInitializationSettings();
+    var iosSettings = const IOSInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+    );
     var settings =
         InitializationSettings(android: androidSetting, iOS: iosSettings);
     fltNotification = FlutterLocalNotificationsPlugin();
