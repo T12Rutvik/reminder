@@ -16,7 +16,7 @@ class PageRouter {
         bool isUpdate = settings.arguments as bool;
         return MaterialPageRoute(
             builder: (context) => SetTimerScreen(
-                  isUpdate: isUpdate,
+                  title: isUpdate,
                 ));
       default:
         return MaterialPageRoute(builder: (context) {

@@ -34,20 +34,17 @@ class SetTimerViewModel extends BaseModel {
     updateUI();
   }
 
-  updateData() async {
+  updateData(reminderId) async {
     dynamic data;
-    String reminderId = "1653627618482";
     String? reminderKey;
     await database.child("reminder").once().then((value) {
       data = value.snapshot.value;
       data.forEach((key, value) {
         if (reminderId == value['id']) {
           reminderKey = key;
-          print(reminderKey);
         }
       });
     });
-    print(reminderKey);
     database.child("reminder").child(reminderKey!).update({
       'title': titleController.text,
       'note': noteController.text,
