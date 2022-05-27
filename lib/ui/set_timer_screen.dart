@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:reminder/core/view_model/base_view.dart';
 
@@ -20,15 +19,12 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
-
     return BaseView<SetTimerViewModel>(
       builder: (buildContext, model, child) {
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
             title: Text(
-              // args.title,
               widget.screenArguments!.isUpdate!
                   ? "Update Reminder"
                   : "Create Reminder",

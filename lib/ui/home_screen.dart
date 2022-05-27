@@ -12,7 +12,8 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   HomeViewModel? model;
 
   @override
@@ -239,6 +240,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                 ),
+                ElevatedButton(
+                  onPressed: model.showNotification,
+                  child: const Text('Notification'),
+                ),
               ],
             ),
           ),
@@ -246,6 +251,8 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       onModelReady: (model) async {
         this.model = model;
+        model.localNotification();
+        model.showNotification();
         model.readData();
       },
     );
