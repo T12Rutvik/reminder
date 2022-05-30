@@ -11,12 +11,8 @@ class SetTimerViewModel extends BaseModel {
 
   TextEditingController titleController = TextEditingController();
   TextEditingController noteController = TextEditingController();
-
   DateTime? selectedDate;
   DateTime? time;
-
-  DateTime? startTime;
-  final currentTime = DateTime.now();
 
   //
   bool isOn = false;
@@ -65,15 +61,6 @@ class SetTimerViewModel extends BaseModel {
     });
   }
 
-  timeDiff() {
-    final diff_dy = currentTime.difference(startTime!).inDays;
-    final diff_hr = currentTime.difference(startTime!).inHours;
-    final diff_mn = currentTime.difference(startTime!).inMinutes;
-    // final diff_sc = currentTime.difference(startTime).inSeconds;
-
-    print("dy: $diff_dy,hr: $diff_hr,mn: $diff_mn");
-  }
-
   localNotification() {
     var androidSetting = const AndroidInitializationSettings("app_icon");
     var iosSettings = const IOSInitializationSettings();
@@ -83,12 +70,12 @@ class SetTimerViewModel extends BaseModel {
     fltNotification!.initialize(settings);
   }
 
-  showNotification(int id, String title, String body) async {
+  showNotification(int id, String title, String body, Duration duration) async {
     await fltNotification!.zonedSchedule(
       id,
       title,
       body,
-      tz.TZDateTime.now(tz.local).add(const Duration(seconds: 2)),
+      tz.TZDateTime.now(tz.local).add(duration),
       const NotificationDetails(
         android: AndroidNotificationDetails(
           "main_channel",
