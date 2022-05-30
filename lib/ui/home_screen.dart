@@ -4,6 +4,7 @@ import 'package:reminder/core/view_model/base_view.dart';
 import 'package:reminder/core/view_model/home_view_model/home_screen_model.dart';
 
 import '../core/routing/routes.dart';
+import '../core/view_model/home_view_model/home_screen_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,6 +16,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   HomeViewModel? model;
+  TextEditingController _controller = TextEditingController();
+  TextEditingController _controllerr = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen>
                                           .elementAt(index)
                                           .id),
                                 );
-                                model.showNotification();
+                                // model.showNotification();
                               },
                               child: Container(
                                 width: double.infinity,
@@ -241,8 +244,17 @@ class _HomeScreenState extends State<HomeScreen>
                     },
                   ),
                 ),
+                TextField(
+                  controller: _controller,
+                ),
+                TextField(
+                  controller: _controllerr,
+                ),
                 ElevatedButton(
-                  onPressed: model.showNotification,
+                  onPressed: () {
+                    model.showNotification(
+                        0, _controller.text, _controllerr.text);
+                  },
                   child: const Text('Notification'),
                 ),
               ],
