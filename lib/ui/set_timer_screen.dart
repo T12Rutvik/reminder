@@ -237,6 +237,9 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                       } else {
                         model.addData();
                         model.showNotification(0, "Hello", "Hello Rutvik");
+                        /*   if (model.time  DateTime.now()) {
+                        model.showNotification(0, "Hello", "Hello Rutvik");
+                        }*/
                       }
                       // model.timeDiff();
                     },

@@ -88,7 +88,7 @@ class SetTimerViewModel extends BaseModel {
       id,
       title,
       body,
-      tz.TZDateTime.now(tz.local).add(const Duration(minutes: 4)),
+      tz.TZDateTime.now(tz.local).add(const Duration(seconds: 2)),
       const NotificationDetails(
         android: AndroidNotificationDetails(
           "main_channel",
