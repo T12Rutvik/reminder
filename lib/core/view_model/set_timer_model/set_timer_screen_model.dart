@@ -70,7 +70,10 @@ class SetTimerViewModel extends BaseModel {
     fltNotification!.initialize(settings);
   }
 
-  showNotification(int id, String title, String body, Duration duration) async {
+  Future<void> showNotification(
+      int id, String title, String body, Duration duration) async {
+    var detroit = tz.getLocation('America/Detroit');
+    var now = tz.TZDateTime.now(detroit);
     await fltNotification!.zonedSchedule(
       id,
       title,

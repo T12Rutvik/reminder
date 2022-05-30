@@ -166,7 +166,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                           child: TextFormField(
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return 'Enter Any Title';
+                                return 'Please Enter Title.';
                               } else {
                                 return null;
                               }
@@ -245,12 +245,9 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                         int tDiff = model.time == null
                             ? 1
                             : model.time!.difference(DateTime.now()).inSeconds;
-                        /* int dDiff = model.selectedDate == null
-                            ? 1
-                            : model.selectedDate!
-                                .difference(DateTime.now())
-                                .inMinutes;*/
+                        int dDiff = model.selectedDate == null ? 1 : 1;
                         print(tDiff);
+                        // print(dDiff);
                         if (_formKey.currentState!.validate()) {
                           if (widget.screenArguments!.isUpdate!) {
                             await model
@@ -258,12 +255,10 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                           } else {
                             model.addData();
                             model.showNotification(
-                              0,
+                              1,
                               DateTime.now().toString(),
-                              "body",
-                              Duration(
-                                seconds: tDiff,
-                              ),
+                              "Notes",
+                              Duration(seconds: tDiff, minutes: dDiff),
                             );
                           }
                         }
