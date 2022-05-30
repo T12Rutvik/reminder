@@ -16,8 +16,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   HomeViewModel? model;
+/*
   TextEditingController _controller = TextEditingController();
   TextEditingController _controllerr = TextEditingController();
+*/
 
   @override
   Widget build(BuildContext context) {
@@ -244,19 +246,18 @@ class _HomeScreenState extends State<HomeScreen>
                     },
                   ),
                 ),
-                TextField(
+                /*TextField(
                   controller: _controller,
                 ),
                 TextField(
                   controller: _controllerr,
-                ),
-                ElevatedButton(
+                ),*/
+                /* ElevatedButton(
                   onPressed: () {
-                    model.showNotification(
-                        0, _controller.text, _controllerr.text);
+                   X
                   },
                   child: const Text('Notification'),
-                ),
+                ),*/
               ],
             ),
           ),
@@ -264,7 +265,6 @@ class _HomeScreenState extends State<HomeScreen>
       },
       onModelReady: (model) async {
         this.model = model;
-        model.localNotification();
         model.readData();
       },
     );

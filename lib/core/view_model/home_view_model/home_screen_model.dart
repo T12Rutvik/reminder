@@ -1,15 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:reminder/core/view_model/base_model.dart';
-import 'package:timezone/timezone.dart' as tz;
 
 import '../../model/home_model.dart';
 
 class HomeViewModel extends BaseModel {
-  FlutterLocalNotificationsPlugin? fltNotification;
-
   bool isOn = false;
   DateFormat formatter = DateFormat.yMMMMd('en_US');
   dynamic data;
@@ -61,52 +57,5 @@ class HomeViewModel extends BaseModel {
       time += t;
     }
     return time;
-  }
-
-  localNotification() {
-    var androidSetting = const AndroidInitializationSettings("app_icon");
-    var iosSettings = const IOSInitializationSettings();
-    var settings =
-        InitializationSettings(android: androidSetting, iOS: iosSettings);
-    fltNotification = FlutterLocalNotificationsPlugin();
-    fltNotification!.initialize(settings);
-  }
-
-  showNotification(int id, String title, String body) async {
-    await fltNotification!.zonedSchedule(
-      id,
-      title,
-      body,
-      tz.TZDateTime.now(tz.local).add(const Duration(seconds: 1)),
-      const NotificationDetails(
-        android: AndroidNotificationDetails(
-          "main_channel",
-          "Main Channel",
-          importance: Importance.max,
-          priority: Priority.max,
-        ),
-        iOS: IOSNotificationDetails(
-          sound: 'default.wav',
-          presentAlert: true,
-          presentBadge: true,
-          presentSound: true,
-        ),
-      ),
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      androidAllowWhileIdle: true,
-    );
-    /*var androidDetails = const AndroidNotificationDetails(
-      "channelId",
-      "channelName",
-    );
-    var iosDetails = const IOSNotificationDetails(
-      sound: 'default.wav',
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: true,
-    );
-    var details = NotificationDetails(android: androidDetails, iOS: iosDetails);
-    await fltNotification!.show(0, "Hello", "Hello Rutvik", details);*/
   }
 }

@@ -236,7 +236,9 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                             .updateData(widget.screenArguments!.reminderId);
                       } else {
                         model.addData();
+                        model.showNotification(0, "Hello", "Hello Rutvik");
                       }
+                      // model.timeDiff();
                     },
                     style: ButtonStyle(
                       backgroundColor:
@@ -273,6 +275,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
       },
       onModelReady: (model) async {
         this.model = model;
+        model.localNotification();
       },
     );
   }
