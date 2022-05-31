@@ -16,7 +16,6 @@ class SetTimerScreen extends StatefulWidget {
 
 class _SetTimerScreenState extends State<SetTimerScreen> {
   SetTimerViewModel? model;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +47,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
             ],
           ),
           body: Form(
-            key: _formKey,
+            key: model.formKey,
             child: Column(
               children: [
                 Row(
@@ -127,7 +126,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                                   maximumYear: 2025,
                                   minuteInterval: 1,
                                   minimumDate: DateTime.now()
-                                      .subtract(const Duration(minutes: 10)),
+                                      .subtract(const Duration(minutes: 1)),
                                   mode: CupertinoDatePickerMode.date,
                                 ),
                               );
@@ -245,24 +244,30 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                         int tDiff = model.time == null
                             ? 1
                             : model.time!.difference(DateTime.now()).inSeconds;
-                        int dDiff = model.selectedDate == null ? 1 : 1;
                         print(tDiff);
-                        // print(dDiff);
-                        if (_formKey.currentState!.validate()) {
+                        if (tDiff < 0) {
+                          tDiff = tDiff + 86400;
+                        }
+                        print(tDiff);
+                        if (model.formKey.currentState!.validate()) {
                           if (widget.screenArguments!.isUpdate!) {
                             await model
                                 .updateData(widget.screenArguments!.reminderId);
                           } else {
                             model.addData();
-                            model.showNotification(
-                              1,
-                              DateTime.now().toString(),
-                              "Notes",
-                              Duration(seconds: tDiff, minutes: dDiff),
-                            );
                           }
+                          model.showNotification(
+                            1,
+                            model.titleController.text,
+                            model.noteController.text,
+                            Duration(
+                              seconds: tDiff,
+                            ),
+                          );
+                          Navigator.pop(context);
                         }
-                        _formKey.currentState!.save();
+                        model.formKey.currentState!.save();
+                        model.clearText();
                       },
                       style: ButtonStyle(
                         backgroundColor:

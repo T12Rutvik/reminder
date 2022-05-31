@@ -8,27 +8,32 @@ import '../../model/home_model.dart';
 class HomeViewModel extends BaseModel {
   bool isOn = false;
   DateFormat formatter = DateFormat.yMMMMd('en_US');
-  dynamic data;
   List<ReminderData> reminderList = [];
 
   final database = FirebaseDatabase.instance.reference();
   FirebaseAuth auth = FirebaseAuth.instance;
 
   readData() {
+    dynamic data = 0;
     database.child('reminder').onValue.listen((value) {
       reminderList.clear();
       data = value.snapshot.value;
-      data.forEach((key, value) {
-        reminderList.add(
-          ReminderData(
+      if (data != null) {
+        data.forEach((key, value) {
+          reminderList.add(
+            ReminderData(
               title: value['title'],
               note: value['note'],
               date: value['date'],
               time: value['time'],
-              id: value['id']),
-        );
-      });
-      updateUI();
+              id: value['id'],
+            ),
+          );
+        });
+        updateUI();
+      } else {
+        return;
+      }
     });
   }
 

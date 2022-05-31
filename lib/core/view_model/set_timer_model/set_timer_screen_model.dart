@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:reminder/core/view_model/base_model.dart';
@@ -9,8 +10,16 @@ import 'package:timezone/timezone.dart' as tz;
 class SetTimerViewModel extends BaseModel {
   FlutterLocalNotificationsPlugin? fltNotification;
 
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   TextEditingController titleController = TextEditingController();
   TextEditingController noteController = TextEditingController();
+
+  clearText() {
+    titleController.clear();
+    noteController.clear();
+  }
+
   DateTime? selectedDate;
   DateTime? time;
 
@@ -72,8 +81,8 @@ class SetTimerViewModel extends BaseModel {
 
   Future<void> showNotification(
       int id, String title, String body, Duration duration) async {
-    var detroit = tz.getLocation('America/Detroit');
-    var now = tz.TZDateTime.now(detroit);
+    /*var detroit = tz.getLocation('America/Detroit');
+    var now = tz.TZDateTime.now(detroit);*/
     await fltNotification!.zonedSchedule(
       id,
       title,
