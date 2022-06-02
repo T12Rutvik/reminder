@@ -5,12 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:reminder/core/view_model/base_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
+import 'package:uuid/uuid.dart';
 
 class SetTimerViewModel extends BaseModel {
   FlutterLocalNotificationsPlugin? fltNotification;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  var uid = 0;
+  var uuid = const Uuid();
+  SharedPreferences? pref;
 
   TextEditingController titleController = TextEditingController();
   TextEditingController noteController = TextEditingController();
@@ -20,6 +25,7 @@ class SetTimerViewModel extends BaseModel {
     noteController.clear();
   }
 
+  //
   DateTime? selectedDate;
   DateTime? time;
 
@@ -32,18 +38,29 @@ class SetTimerViewModel extends BaseModel {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   //
+  setData() async {
+    pref = await SharedPreferences.getInstance();
+    await pref!.setInt('uid', uid);
+    updateUI();
+  }
+
+  getData() async {
+    pref = await SharedPreferences.getInstance();
+    uid = pref!.getInt('uid') ?? 0;
+    updateUI();
+  }
+
   addData() {
+    uid++;
     database.child('reminder').push().set({
       'title': titleController.text,
       'note': noteController.text,
-      'date': selectedDate == null
-          ? DateTime.now().toString().split(' ')[0]
-          : selectedDate.toString().split(' ')[0],
-      'time': time == null
-          ? DateTime.now().toString().split(' ')[1].split('.')[0]
-          : time.toString().split(' ')[1].split('.')[0],
-      'id': DateTime.now().millisecondsSinceEpoch.toString(),
+      'date': selectedDate == null ? DateTime.now().toString().split(' ')[0] : selectedDate.toString().split(' ')[0],
+      'time': time == null ? DateTime.now().toString().split(' ')[1].split('.')[0] : time.toString().split(' ')[1].split('.')[0],
+      'id': uid.toString(),
+      'isSelected': true,
     });
+    setData();
     updateUI();
   }
 
@@ -58,31 +75,28 @@ class SetTimerViewModel extends BaseModel {
         }
       });
     });
+    print(titleController.text);
     database.child("reminder").child(reminderKey!).update({
       'title': titleController.text,
       'note': noteController.text,
-      'date': selectedDate == null
-          ? DateTime.now().toString().split(' ')[0]
-          : selectedDate.toString().split(' ')[0],
-      'time': time == null
-          ? DateTime.now().toString().split(' ')[1].split('.')[0]
-          : time.toString().split(' ')[1].split('.')[0]
+      'date': selectedDate == null ? DateTime.now().toString().split(' ')[0] : selectedDate.toString().split(' ')[0],
+      'time': time == null ? DateTime.now().toString().split(' ')[1].split('.')[0] : time.toString().split(' ')[1].split('.')[0],
+      'id': uuid.v1(),
     });
+    // setData();
+    updateUI();
+    // print(titleController.text);
   }
 
   localNotification() {
     var androidSetting = const AndroidInitializationSettings("app_icon");
     var iosSettings = const IOSInitializationSettings();
-    var settings =
-        InitializationSettings(android: androidSetting, iOS: iosSettings);
+    var settings = InitializationSettings(android: androidSetting, iOS: iosSettings);
     fltNotification = FlutterLocalNotificationsPlugin();
     fltNotification!.initialize(settings);
   }
 
-  Future<void> showNotification(
-      int id, String title, String body, Duration duration) async {
-    /*var detroit = tz.getLocation('America/Detroit');
-    var now = tz.TZDateTime.now(detroit);*/
+  showNotification(var id, String title, String body, Duration duration) async {
     await fltNotification!.zonedSchedule(
       id,
       title,
@@ -102,8 +116,7 @@ class SetTimerViewModel extends BaseModel {
           presentSound: true,
         ),
       ),
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       androidAllowWhileIdle: true,
     );
   }

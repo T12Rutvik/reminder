@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:reminder/core/model/home_model.dart';
 import 'package:reminder/core/view_model/base_view.dart';
 
 import '../core/model/home_model.dart';
@@ -25,9 +26,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
           appBar: AppBar(
             centerTitle: true,
             title: Text(
-              widget.screenArguments!.isUpdate!
-                  ? "Update Reminder"
-                  : "Create Reminder",
+              widget.screenArguments!.isUpdate! ? "Update Reminder" : "Create Reminder",
               style: TextStyle(color: Colors.grey.shade800),
             ),
             elevation: 0.4,
@@ -36,8 +35,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(Icons.arrow_back_ios_outlined,
-                  color: Colors.grey.shade800),
+              icon: Icon(Icons.arrow_back_ios_outlined, color: Colors.grey.shade800),
             ),
             actions: [
               Icon(Icons.more_vert, color: Colors.grey.shade800, size: 30),
@@ -59,6 +57,8 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                       child: CupertinoDatePicker(
                         use24hFormat: false,
                         initialDateTime: DateTime.now(),
+                        minimumDate: DateTime.now(),
+                        // minuteInterval: 1,
                         mode: CupertinoDatePickerMode.time,
                         onDateTimeChanged: (value) {
                           if (value != model.time) {
@@ -71,35 +71,26 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                   ],
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.only(left: 25.0, top: 20, bottom: 20),
+                  padding: const EdgeInsets.only(left: 25.0, top: 20, bottom: 20),
                   child: Row(
                     children: [
                       GestureDetector(
                         child: Container(
                           width: 200,
                           height: 37,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(9),
-                              color: Colors.grey.shade200),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(9), color: Colors.grey.shade200),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Center(
-                                child: Icon(Icons.date_range,
-                                    color: Colors.grey.shade600),
+                                child: Icon(Icons.date_range, color: Colors.grey.shade600),
                               ),
                               Text(
                                 model.selectedDate == null
-                                    ? model.formatter
-                                        .format(DateTime.now())
-                                        .toString()
-                                    : model.formatter
-                                        .format(model.selectedDate!)
-                                        .toString(),
-                                style: TextStyle(
-                                    fontSize: 17, color: Colors.grey.shade800),
-                              )
+                                    ? model.formatter.format(DateTime.now()).toString()
+                                    : model.formatter.format(model.selectedDate!).toString(),
+                                style: TextStyle(fontSize: 17, color: Colors.grey.shade800),
+                              ),
                             ],
                           ),
                         ),
@@ -108,11 +99,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                             context: context,
                             builder: (BuildContext builder) {
                               return Container(
-                                height: MediaQuery.of(context)
-                                        .copyWith()
-                                        .size
-                                        .height *
-                                    0.25,
+                                height: MediaQuery.of(context).copyWith().size.height * 0.25,
                                 color: Colors.white,
                                 child: CupertinoDatePicker(
                                   onDateTimeChanged: (value) {
@@ -125,8 +112,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                                   minimumYear: DateTime.now().year,
                                   maximumYear: 2025,
                                   minuteInterval: 1,
-                                  minimumDate: DateTime.now()
-                                      .subtract(const Duration(minutes: 1)),
+                                  minimumDate: DateTime.now().subtract(const Duration(seconds: 1)),
                                   mode: CupertinoDatePickerMode.date,
                                 ),
                               );
@@ -141,15 +127,12 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                   thickness: 1.5,
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 30, horizontal: 25),
+                  padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 25),
                   child: Column(
                     children: [
                       Row(
                         children: const [
-                          Text('Title',
-                              style: TextStyle(
-                                  fontSize: 22, fontWeight: FontWeight.w500)),
+                          Text('Title', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
                         ],
                       ),
                       const SizedBox(
@@ -183,9 +166,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                       ),
                       Row(
                         children: const [
-                          Text('Note',
-                              style: TextStyle(
-                                  fontSize: 22, fontWeight: FontWeight.w500)),
+                          Text('Note', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
                         ],
                       ),
                       const SizedBox(
@@ -237,43 +218,50 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                     color: Colors.white,
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 35, bottom: 42, right: 35, top: 18),
+                    padding: const EdgeInsets.only(left: 35, bottom: 42, right: 35, top: 18),
                     child: ElevatedButton(
                       onPressed: () async {
-                        int tDiff = model.time == null
-                            ? 1
-                            : model.time!.difference(DateTime.now()).inSeconds;
-                        print(tDiff);
+                        int tDiff = model.time == null ? 1 : model.time!.difference(DateTime.now()).inSeconds;
+                        print("Abc=${model.time}");
                         if (tDiff < 0) {
                           tDiff = tDiff + 86400;
                         }
-                        print(tDiff);
+                        // print(tDiff);
+                        print(model.titleController.text);
                         if (model.formKey.currentState!.validate()) {
                           if (widget.screenArguments!.isUpdate!) {
-                            await model
-                                .updateData(widget.screenArguments!.reminderId);
+                            model.fltNotification!.cancel(model.uid);
+                            // model.clearText();
+                            model.updateData(widget.screenArguments!.reminderId);
+                            // print(widget.screenArguments!.reminderId);
+                            model.showNotification(
+                              model.uid,
+                              model.titleController.text,
+                              model.noteController.text,
+                              Duration(
+                                seconds: tDiff,
+                              ),
+                            );
                           } else {
+                            print("");
                             model.addData();
+                            model.showNotification(
+                              model.uid,
+                              model.titleController.text,
+                              model.noteController.text,
+                              Duration(
+                                seconds: tDiff,
+                              ),
+                            );
                           }
-                          model.showNotification(
-                            1,
-                            model.titleController.text,
-                            model.noteController.text,
-                            Duration(
-                              seconds: tDiff,
-                            ),
-                          );
                           Navigator.pop(context);
                         }
                         model.formKey.currentState!.save();
-                        model.clearText();
+                        // model.clearText();
                       },
                       style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.purple),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.purple),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(13),
                           ),
@@ -282,16 +270,12 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(widget.screenArguments!.isUpdate!
-                              ? null
-                              : Icons.add),
+                          Icon(widget.screenArguments!.isUpdate! ? null : Icons.add),
                           const SizedBox(
                             width: 10,
                           ),
                           Text(
-                            widget.screenArguments!.isUpdate!
-                                ? "Update Reminder"
-                                : "Create Reminder",
+                            widget.screenArguments!.isUpdate! ? "Update Reminder" : "Create Reminder",
                             style: const TextStyle(fontSize: 20),
                           ),
                         ],
@@ -306,6 +290,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
       },
       onModelReady: (model) async {
         this.model = model;
+        model.getData();
         model.localNotification();
       },
     );
