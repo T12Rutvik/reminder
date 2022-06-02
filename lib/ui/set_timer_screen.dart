@@ -57,8 +57,8 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                       child: CupertinoDatePicker(
                         use24hFormat: false,
                         initialDateTime: DateTime.now(),
-                        minimumDate: DateTime.now(),
-                        // minuteInterval: 1,
+                        /*minimumDate: DateTime.now(),
+                        minuteInterval: 1,*/
                         mode: CupertinoDatePickerMode.time,
                         onDateTimeChanged: (value) {
                           if (value != model.time) {
@@ -103,6 +103,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                                 color: Colors.white,
                                 child: CupertinoDatePicker(
                                   onDateTimeChanged: (value) {
+                                    // DateTime.now();
                                     if (value != model.selectedDate) {
                                       model.selectedDate = value;
                                       setState(() {});
