@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:reminder/core/model/home_model.dart';
 import 'package:reminder/core/view_model/base_view.dart';
+import 'package:toast/toast.dart';
 
 import '../core/model/home_model.dart';
 import '../core/view_model/set_timer_model/set_timer_screen_model.dart';
@@ -20,6 +21,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ToastContext().init(context);
     return BaseView<SetTimerViewModel>(
       builder: (buildContext, model, child) {
         return Scaffold(
@@ -56,15 +58,11 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                       width: 220,
                       child: CupertinoDatePicker(
                         use24hFormat: false,
-                        initialDateTime: DateTime.now(),
-                        /*minimumDate: DateTime.now(),
-                        minuteInterval: 1,*/
+                        initialDateTime: DateTime.now(), // model.pastDate,
                         mode: CupertinoDatePickerMode.time,
                         onDateTimeChanged: (value) {
-                          if (value != model.time) {
-                            model.time = value;
-                            setState(() {});
-                          }
+                          model.time = value;
+                          setState(() {});
                         },
                       ),
                     ),
@@ -103,11 +101,8 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                                 color: Colors.white,
                                 child: CupertinoDatePicker(
                                   onDateTimeChanged: (value) {
-                                    // DateTime.now();
-                                    if (value != model.selectedDate) {
-                                      model.selectedDate = value;
-                                      setState(() {});
-                                    }
+                                    model.selectedDate = value;
+                                    setState(() {});
                                   },
                                   initialDateTime: DateTime.now(),
                                   minimumYear: DateTime.now().year,
@@ -222,40 +217,39 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                     padding: const EdgeInsets.only(left: 35, bottom: 42, right: 35, top: 18),
                     child: ElevatedButton(
                       onPressed: () async {
-                        int tDiff = model.time == null ? 1 : model.time!.difference(DateTime.now()).inSeconds;
-                        print("Abc=${model.time}");
+                        DateTime tConvert = DateTime.parse("${model.selectedDate.toString().split(' ')[0]} ${model.time.toString().split(' ')[1]}");
+                        int tDiff = tConvert.difference(DateTime.now()).inSeconds;
+                        // tDiff = tDiff + 41400;
+                        print('abc:::$tConvert');
+                        print('xyz:::$tDiff');
                         if (tDiff < 0) {
-                          tDiff = tDiff + 86400;
-                        }
-                        // print(tDiff);
-                        print(model.titleController.text);
-                        if (model.formKey.currentState!.validate()) {
-                          if (widget.screenArguments!.isUpdate!) {
-                            model.fltNotification!.cancel(model.uid);
-                            // model.clearText();
-                            model.updateData(widget.screenArguments!.reminderId);
-                            // print(widget.screenArguments!.reminderId);
-                            model.showNotification(
-                              model.uid,
-                              model.titleController.text,
-                              model.noteController.text,
-                              Duration(
-                                seconds: tDiff,
-                              ),
-                            );
-                          } else {
-                            print("");
-                            model.addData();
-                            model.showNotification(
-                              model.uid,
-                              model.titleController.text,
-                              model.noteController.text,
-                              Duration(
-                                seconds: tDiff,
-                              ),
-                            );
+                          model.showToast("You are selected Past Time", gravity: Toast.bottom, duration: Toast.lengthLong);
+                        } else {
+                          if (model.formKey.currentState!.validate()) {
+                            if (widget.screenArguments!.isUpdate!) {
+                              // model.fltNotification!.cancel(model.uuid);
+                              model.updateData(widget.screenArguments!.reminderId);
+                              model.showNotification(
+                                model.uid,
+                                model.titleController.text,
+                                model.noteController.text,
+                                Duration(
+                                  seconds: tDiff,
+                                ),
+                              );
+                            } else {
+                              model.addData();
+                              model.showNotification(
+                                model.uid,
+                                model.titleController.text,
+                                model.noteController.text,
+                                Duration(
+                                  seconds: tDiff,
+                                ),
+                              );
+                            }
+                            Navigator.pop(context);
                           }
-                          Navigator.pop(context);
                         }
                         model.formKey.currentState!.save();
                         // model.clearText();

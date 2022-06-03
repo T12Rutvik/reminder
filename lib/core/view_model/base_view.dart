@@ -5,8 +5,7 @@ import 'package:reminder/core/view_model/base_model.dart';
 import '../routing/locator/locator.dart';
 
 class BaseView<T extends BaseModel> extends StatefulWidget {
-  final Widget Function(BuildContext buildContext, T model, Widget? child)
-      builder;
+  final Widget Function(BuildContext buildContext, T model, Widget? child) builder;
   final Function(T) onModelReady;
 
   BaseView({required this.builder, required this.onModelReady});

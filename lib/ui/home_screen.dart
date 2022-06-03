@@ -138,9 +138,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                                       'isSelected': val,
                                                     });
                                                     if (val) {
-                                                      print(value['date']);
-                                                      print("${value['date']} ${model.reminderList.elementAt(index).time!}.000");
-
                                                       DateTime tConvert =
                                                           DateTime.parse("${value['date']} ${model.reminderList.elementAt(index).time!}.000");
                                                       int tDiff = tConvert.difference(DateTime.now()).inSeconds;

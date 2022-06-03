@@ -7,10 +7,12 @@ import 'package:intl/intl.dart';
 import 'package:reminder/core/view_model/base_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
+import 'package:toast/toast.dart';
 import 'package:uuid/uuid.dart';
 
 class SetTimerViewModel extends BaseModel {
   FlutterLocalNotificationsPlugin? fltNotification;
+  DateTime pastDate = DateTime.now();
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   var uid = 0;
@@ -26,8 +28,8 @@ class SetTimerViewModel extends BaseModel {
   }
 
   //
-  DateTime? selectedDate;
-  DateTime? time;
+  DateTime? selectedDate = DateTime.now();
+  DateTime? time = DateTime.now();
 
   //
   bool isOn = false;
@@ -119,5 +121,13 @@ class SetTimerViewModel extends BaseModel {
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       androidAllowWhileIdle: true,
     );
+  }
+
+  showToast(
+    String msg, {
+    int? duration,
+    int? gravity,
+  }) {
+    Toast.show(msg, duration: duration, gravity: gravity);
   }
 }
