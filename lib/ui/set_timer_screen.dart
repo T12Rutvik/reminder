@@ -226,7 +226,6 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                         } else {
                           if (model.formKey.currentState!.validate()) {
                             if (widget.screenArguments!.isUpdate!) {
-                              // model.fltNotification!.cancel(model.uuid);
                               model.updateData(widget.screenArguments!.reminderId);
                               model.showNotification(
                                 model.uid,
@@ -238,6 +237,24 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                               );
                             } else {
                               model.addData();
+                              DateTime tConvert =
+                                  DateTime.parse("${model.selectedDate.toString().split(' ')[0]} ${model.time.toString().split(' ')[1]}");
+                              int tDiff = tConvert.difference(DateTime.now()).inSeconds;
+                              int h, m, s;
+                              int value = tDiff;
+
+                              h = value ~/ 3600;
+                              String hourLeft = h.toString().length < 2 ? "0" + h.toString() : h.toString();
+
+                              m = ((value - h * 3600)) ~/ 60;
+                              String minuteLeft = m.toString().length < 2 ? "0" + m.toString() : m.toString();
+
+                              s = value - (h * 3600) - (m * 60);
+                              String secondsLeft = s.toString().length < 2 ? "0" + s.toString() : s.toString();
+
+                              String result = "$hourLeft:$minuteLeft:$secondsLeft";
+                              Navigator.pop(context);
+                              model.showToast("reminder set for $result", gravity: Toast.bottom, duration: Toast.lengthLong);
                               model.showNotification(
                                 model.uid,
                                 model.titleController.text,
@@ -247,7 +264,6 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                                 ),
                               );
                             }
-                            Navigator.pop(context);
                           }
                         }
                         model.formKey.currentState!.save();
