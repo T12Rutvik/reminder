@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:reminder/core/model/home_model.dart';
 import 'package:reminder/core/view_model/base_view.dart';
@@ -133,14 +134,18 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                               model.database.child("reminder").once().then((value) {
                                                 data = value.snapshot.value;
                                                 data!.forEach((key, value) {
+                                                  DateTime tConvert =
+                                                      DateTime.parse("${value['date']} ${model.reminderList.elementAt(index).time!}.000");
+                                                  int tDiff = tConvert.difference(DateTime.now()).inSeconds;
+
                                                   if (value['id'] == model.suppoter) {
                                                     model.database.child('reminder').child(key).update({
                                                       'isSelected': val,
                                                     });
                                                     if (val) {
-                                                      DateTime tConvert =
-                                                          DateTime.parse("${value['date']} ${model.reminderList.elementAt(index).time!}.000");
-                                                      int tDiff = tConvert.difference(DateTime.now()).inSeconds;
+                                                      if (tDiff < 0) {
+                                                        tDiff = tDiff + 86400;
+                                                      }
                                                       print(tDiff);
                                                       model.showNotification(
                                                           int.parse(model.reminderList.elementAt(index).id!),
@@ -199,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                                             ),
-                                          )
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -207,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                       padding: const EdgeInsets.only(left: 30.0),
                                       child: Row(
                                         children: [
-                                          Icon(Icons.notes_outlined, color: Colors.grey.shade500),
+                                          Icon(model.reminderList.elementAt(index).note == '' ? null : Icons.notes, color: Colors.grey.shade500),
                                           const SizedBox(
                                             width: 15,
                                           ),

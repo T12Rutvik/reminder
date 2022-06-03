@@ -13,6 +13,7 @@ import 'package:uuid/uuid.dart';
 class SetTimerViewModel extends BaseModel {
   FlutterLocalNotificationsPlugin? fltNotification;
   DateTime pastDate = DateTime.now();
+  bool isButtonActive = true;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   var uid = 0;
@@ -83,9 +84,9 @@ class SetTimerViewModel extends BaseModel {
       'note': noteController.text,
       'date': selectedDate == null ? DateTime.now().toString().split(' ')[0] : selectedDate.toString().split(' ')[0],
       'time': time == null ? DateTime.now().toString().split(' ')[1].split('.')[0] : time.toString().split(' ')[1].split('.')[0],
-      'id': uuid.v1(),
+      'id': uid.toString(),
     });
-    // setData();
+    setData();
     updateUI();
     // print(titleController.text);
   }

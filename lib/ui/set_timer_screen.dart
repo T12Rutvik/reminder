@@ -219,7 +219,6 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                       onPressed: () async {
                         DateTime tConvert = DateTime.parse("${model.selectedDate.toString().split(' ')[0]} ${model.time.toString().split(' ')[1]}");
                         int tDiff = tConvert.difference(DateTime.now()).inSeconds;
-                        // tDiff = tDiff + 41400;
                         print('abc:::$tConvert');
                         print('xyz:::$tDiff');
                         if (tDiff < 0) {
