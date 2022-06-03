@@ -83,6 +83,20 @@ class HomeViewModel extends BaseModel {
     Toast.show(msg, duration: duration, gravity: gravity);
   }
 
+  String intToTimeLeft(int value) {
+    int h, m, s;
+
+    h = value ~/ 3600;
+
+    m = ((value - h * 3600)) ~/ 60;
+
+    s = value - (h * 3600) - (m * 60);
+
+    String result = "$h:$m:$s";
+
+    return result;
+  }
+
   timeConvert({required String time}) {
     String? t;
 

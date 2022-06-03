@@ -58,7 +58,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                       width: 220,
                       child: CupertinoDatePicker(
                         use24hFormat: false,
-                        initialDateTime: DateTime.now(), // model.pastDate,
+                        initialDateTime: DateTime.now().add(const Duration(minutes: 1)),
                         mode: CupertinoDatePickerMode.time,
                         onDateTimeChanged: (value) {
                           model.time = value;

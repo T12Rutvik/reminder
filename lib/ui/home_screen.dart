@@ -141,7 +141,20 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                                     if (val) {
                                                       if (tDiff < 0) {
                                                         tDiff = tDiff + 86400;
-                                                        model.showToast("reminder will show in $tDiff seconds",
+                                                        int h, m, s;
+                                                        int value = tDiff;
+
+                                                        h = value ~/ 3600;
+                                                        String hourLeft = h.toString().length < 2 ? "0" + h.toString() : h.toString();
+
+                                                        m = ((value - h * 3600)) ~/ 60;
+                                                        String minuteLeft = m.toString().length < 2 ? "0" + m.toString() : m.toString();
+
+                                                        s = value - (h * 3600) - (m * 60);
+                                                        String secondsLeft = s.toString().length < 2 ? "0" + s.toString() : s.toString();
+
+                                                        String result = "$hourLeft:$minuteLeft:$secondsLeft";
+                                                        model.showToast("reminder will show in $result",
                                                             gravity: Toast.bottom, duration: Toast.lengthLong);
                                                       }
                                                       print(tDiff);
