@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:reminder/core/model/home_model.dart';
 import 'package:reminder/core/view_model/base_view.dart';
 import 'package:reminder/core/view_model/home_view_model/home_screen_model.dart';
+import 'package:toast/toast.dart';
 
 import '../core/routing/routes.dart';
 import '../core/view_model/home_view_model/home_screen_model.dart';
@@ -21,13 +22,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   HomeViewModel? model;
 
-/*
-  TextEditingController _controller = TextEditingController();
-  TextEditingController _controllerr = TextEditingController();
-*/
-
   @override
   Widget build(BuildContext context) {
+    ToastContext().init(context);
     return BaseView<HomeViewModel>(
       builder: (buildContext, model, child) {
         return Scaffold(
@@ -137,7 +134,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                                   DateTime tConvert =
                                                       DateTime.parse("${value['date']} ${model.reminderList.elementAt(index).time!}.000");
                                                   int tDiff = tConvert.difference(DateTime.now()).inSeconds;
-
                                                   if (value['id'] == model.suppoter) {
                                                     model.database.child('reminder').child(key).update({
                                                       'isSelected': val,
@@ -145,6 +141,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                                     if (val) {
                                                       if (tDiff < 0) {
                                                         tDiff = tDiff + 86400;
+                                                        model.showToast("reminder will show in $tDiff seconds",
+                                                            gravity: Toast.bottom, duration: Toast.lengthLong);
                                                       }
                                                       print(tDiff);
                                                       model.showNotification(

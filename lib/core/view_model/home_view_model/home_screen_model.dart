@@ -4,6 +4,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:reminder/core/view_model/base_model.dart';
 import 'package:timezone/timezone.dart' as tz;
+import 'package:toast/toast.dart';
 
 import '../../model/home_model.dart';
 
@@ -72,6 +73,14 @@ class HomeViewModel extends BaseModel {
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       androidAllowWhileIdle: true,
     );
+  }
+
+  showToast(
+    String msg, {
+    int? duration,
+    int? gravity,
+  }) {
+    Toast.show(msg, duration: duration, gravity: gravity);
   }
 
   timeConvert({required String time}) {
