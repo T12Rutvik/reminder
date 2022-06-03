@@ -129,6 +129,10 @@ class SetTimerViewModel extends BaseModel {
     int? duration,
     int? gravity,
   }) {
-    Toast.show(msg, duration: duration, gravity: gravity);
+    Toast.show(
+      msg,
+      duration: duration,
+      gravity: gravity,
+    );
   }
 }
