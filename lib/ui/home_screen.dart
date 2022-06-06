@@ -43,15 +43,20 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           appBar: AppBar(
             title: Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: Text(model.formatter.format(DateTime.now()), style: const TextStyle(color: Color(0xFFf8ddf6))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(model.formatter.format(DateTime.now()), style: const TextStyle(color: Color(0xFFf8ddf6))),
+                ],
+              ),
             ),
             backgroundColor: const Color(0xFF9d2fc6),
-            actions: const [
+            /*actions: const [
               Icon(Icons.more_vert, size: 30, color: Color(0xFFf8ddf6)),
               SizedBox(
                 width: 20,
               ),
-            ],
+            ],*/
           ),
           body: Padding(
             padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 25.0),

@@ -18,6 +18,8 @@ class SetTimerScreen extends StatefulWidget {
 
 class _SetTimerScreenState extends State<SetTimerScreen> {
   SetTimerViewModel? model;
+  int tDiff = 0;
+  int tDifff = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -55,12 +57,17 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                   children: [
                     SizedBox(
                       height: 250,
-                      width: 220,
+                      width: 280,
                       child: CupertinoDatePicker(
                         use24hFormat: false,
-                        initialDateTime: DateTime.now().add(const Duration(minutes: 1)),
+                        initialDateTime: DateTime.now().add(const Duration(seconds: 1)),
                         mode: CupertinoDatePickerMode.time,
                         onDateTimeChanged: (value) {
+                          model.buttonDis = value;
+                          DateTime tConvert = DateTime.parse("${model.selectedDate.toString().split(' ')[0]} ${model.time.toString().split(' ')[1]}");
+                          print(tConvert);
+                          tDiff = tConvert.difference(DateTime.now()).inSeconds;
+                          print(tDiff);
                           model.time = value;
                           setState(() {});
                         },
@@ -86,7 +93,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                               Text(
                                 model.selectedDate == null
                                     ? model.formatter.format(DateTime.now()).toString()
-                                    : model.formatter.format(model.selectedDate!).toString(),
+                                    : model.formatter.format(model.selectedDate).toString(),
                                 style: TextStyle(fontSize: 17, color: Colors.grey.shade800),
                               ),
                             ],
@@ -101,6 +108,11 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                                 color: Colors.white,
                                 child: CupertinoDatePicker(
                                   onDateTimeChanged: (value) {
+                                    model.buttonDiss = value;
+                                    DateTime tConvert = DateTime.parse(model.buttonDiss.toString());
+                                    print(tConvert);
+                                    tDiff = tConvert.difference(DateTime.now()).inSeconds;
+                                    print(tDifff);
                                     model.selectedDate = value;
                                     setState(() {});
                                   },
@@ -215,83 +227,115 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 35, bottom: 42, right: 35, top: 18),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        DateTime tConvert = DateTime.parse("${model.selectedDate.toString().split(' ')[0]} ${model.time.toString().split(' ')[1]}");
-                        int tDiff = tConvert.difference(DateTime.now()).inSeconds;
-                        print('abc:::$tConvert');
-                        print('xyz:::$tDiff');
-                        if (tDiff < 0) {
-                          model.showToast("You are selected Past Time", gravity: Toast.bottom, duration: Toast.lengthLong);
-                        } else {
-                          if (model.formKey.currentState!.validate()) {
-                            if (widget.screenArguments!.isUpdate!) {
-                              model.fltNotification!.cancel(model.uid);
-                              model.updateData(widget.screenArguments!.reminderId);
-                              model.showNotification(
-                                model.uid,
-                                model.titleController.text,
-                                model.noteController.text,
-                                Duration(
-                                  seconds: tDiff,
+                    child: tDiff < 0
+                        ? ElevatedButton(
+                            onPressed: () {},
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.grey.shade400),
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(13),
                                 ),
-                              );
-                            } else {
-                              model.addData();
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(widget.screenArguments!.isUpdate! ? null : Icons.add),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  widget.screenArguments!.isUpdate! ? "Update Reminder" : "Create Reminder",
+                                  style: const TextStyle(fontSize: 20),
+                                ),
+                              ],
+                            ),
+                          )
+                        : ElevatedButton(
+                            onPressed: () async {
+                              print(model.time);
+                              print(model.selectedDate);
+
                               DateTime tConvert =
                                   DateTime.parse("${model.selectedDate.toString().split(' ')[0]} ${model.time.toString().split(' ')[1]}");
                               int tDiff = tConvert.difference(DateTime.now()).inSeconds;
-                              int h, m, s;
-                              int value = tDiff;
+                              print('xyz:::$tConvert');
+                              print('abc:::$tDiff');
+                              if (tDiff < 0) {
+                                model.showToast("You are selected Past Time", gravity: Toast.bottom, duration: Toast.lengthLong);
+                              } else {
+                                if (model.formKey.currentState!.validate()) {
+                                  if (widget.screenArguments!.isUpdate!) {
+                                    int abc = int.parse(model.uid.toString());
+                                    model.fltNotification!.cancel(abc);
+                                    model.updateData(widget.screenArguments!.reminderId);
+                                    model.showNotification(
+                                      model.uid,
+                                      model.titleController.text,
+                                      model.noteController.text,
+                                      Duration(
+                                        seconds: tDiff,
+                                      ),
+                                    );
+                                    Navigator.pop(context);
+                                  } else {
+                                    model.addData();
+                                    model.fltNotification!.cancelAll();
+                                    DateTime tConvert =
+                                        DateTime.parse("${model.selectedDate.toString().split(' ')[0]} ${model.time.toString().split(' ')[1]}");
+                                    int tDiff = tConvert.difference(DateTime.now()).inSeconds;
+                                    int h, m, s;
+                                    int value = tDiff;
 
-                              h = value ~/ 3600;
-                              String hourLeft = h.toString().length < 2 ? "0" + h.toString() : h.toString();
+                                    h = value ~/ 3600;
+                                    String hourLeft = h.toString().length < 2 ? "0" + h.toString() : h.toString();
 
-                              m = ((value - h * 3600)) ~/ 60;
-                              String minuteLeft = m.toString().length < 2 ? "0" + m.toString() : m.toString();
+                                    m = ((value - h * 3600)) ~/ 60;
+                                    String minuteLeft = m.toString().length < 2 ? "0" + m.toString() : m.toString();
 
-                              s = value - (h * 3600) - (m * 60);
-                              String secondsLeft = s.toString().length < 2 ? "0" + s.toString() : s.toString();
+                                    s = value - (h * 3600) - (m * 60);
+                                    String secondsLeft = s.toString().length < 2 ? "0" + s.toString() : s.toString();
 
-                              Navigator.pop(context);
-                              model.showToast("reminder set for $hourLeft hr $minuteLeft min and $secondsLeft sec",
-                                  gravity: Toast.bottom, duration: Toast.lengthLong);
-                              model.showNotification(
-                                model.uid,
-                                model.titleController.text,
-                                model.noteController.text,
-                                Duration(
-                                  seconds: tDiff,
+                                    Navigator.pop(context);
+                                    model.showToast("reminder set for $hourLeft hr $minuteLeft min and $secondsLeft sec",
+                                        gravity: Toast.bottom, duration: Toast.lengthLong);
+                                    model.showNotification(
+                                      model.uid,
+                                      model.titleController.text,
+                                      model.noteController.text,
+                                      Duration(
+                                        seconds: tDiff,
+                                      ),
+                                    );
+                                  }
+                                }
+                              }
+                              model.formKey.currentState!.save();
+                              // model.clearText();
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.purple),
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(13),
                                 ),
-                              );
-                            }
-                          }
-                        }
-                        model.formKey.currentState!.save();
-                        // model.clearText();
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.purple),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(13),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(widget.screenArguments!.isUpdate! ? null : Icons.add),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  widget.screenArguments!.isUpdate! ? "Update Reminder" : "Create Reminder",
+                                  style: const TextStyle(fontSize: 20),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(widget.screenArguments!.isUpdate! ? null : Icons.add),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            widget.screenArguments!.isUpdate! ? "Update Reminder" : "Create Reminder",
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
                 ),
               ],
