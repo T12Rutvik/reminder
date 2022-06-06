@@ -254,7 +254,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                               String secondsLeft = s.toString().length < 2 ? "0" + s.toString() : s.toString();
 
                               Navigator.pop(context);
-                              model.showToast("reminder set for $hourLeft hr $minuteLeft min and $secondsLeft second",
+                              model.showToast("reminder set for $hourLeft hr $minuteLeft min and $secondsLeft sec",
                                   gravity: Toast.bottom, duration: Toast.lengthLong);
                               model.showNotification(
                                 model.uid,
