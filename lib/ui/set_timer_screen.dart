@@ -226,6 +226,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                         } else {
                           if (model.formKey.currentState!.validate()) {
                             if (widget.screenArguments!.isUpdate!) {
+                              model.fltNotification!.cancel(model.uid);
                               model.updateData(widget.screenArguments!.reminderId);
                               model.showNotification(
                                 model.uid,
@@ -252,9 +253,9 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                               s = value - (h * 3600) - (m * 60);
                               String secondsLeft = s.toString().length < 2 ? "0" + s.toString() : s.toString();
 
-                              String result = "$hourLeft:$minuteLeft:$secondsLeft";
                               Navigator.pop(context);
-                              model.showToast("reminder set for $result", gravity: Toast.bottom, duration: Toast.lengthLong);
+                              model.showToast("reminder set for $hourLeft hr $minuteLeft min and $secondsLeft second",
+                                  gravity: Toast.bottom, duration: Toast.lengthLong);
                               model.showNotification(
                                 model.uid,
                                 model.titleController.text,
