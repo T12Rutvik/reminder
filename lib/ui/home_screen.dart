@@ -153,8 +153,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                                         s = value - (h * 3600) - (m * 60);
                                                         String secondsLeft = s.toString().length < 2 ? "0" + s.toString() : s.toString();
 
-                                                        String result = "$hourLeft:$minuteLeft:$secondsLeft";
-                                                        model.showToast("reminder will show in $result",
+                                                        model.showToast("reminder will show in $hourLeft hr $minuteLeft min $secondsLeft sec",
                                                             gravity: Toast.bottom, duration: Toast.lengthLong);
                                                       }
                                                       print(tDiff);
