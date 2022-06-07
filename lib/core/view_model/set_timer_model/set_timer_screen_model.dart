@@ -14,6 +14,7 @@ class SetTimerViewModel extends BaseModel {
   FlutterLocalNotificationsPlugin? fltNotification;
   DateTime pastDate = DateTime.now();
   bool isButtonActive = true;
+  int tDiff = 0;
 
   // int dis = int.parse(time!.difference(DateTime.now()).toString());
 

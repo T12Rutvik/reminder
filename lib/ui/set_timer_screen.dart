@@ -18,8 +18,6 @@ class SetTimerScreen extends StatefulWidget {
 
 class _SetTimerScreenState extends State<SetTimerScreen> {
   SetTimerViewModel? model;
-  int tDiff = 0;
-  int tDifff = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +63,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                         onDateTimeChanged: (value) {
                           model.time = value;
                           DateTime tConvert = DateTime.parse("${model.selectedDate.toString().split(' ')[0]} ${value.toString().split(' ')[1]}");
-                          tDiff = tConvert.difference(DateTime.now()).inSeconds;
+                          model.tDiff = tConvert.difference(DateTime.now()).inSeconds;
                           setState(() {});
                         },
                       ),
@@ -107,7 +105,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                                   onDateTimeChanged: (value) {
                                     model.selectedDate = value;
                                     DateTime tConvert = DateTime.parse("${value.toString().split(' ')[0]} ${model.time.toString().split(' ')[1]}");
-                                    tDiff = tConvert.difference(DateTime.now()).inSeconds;
+                                    model.tDiff = tConvert.difference(DateTime.now()).inSeconds;
                                     setState(() {});
                                   },
                                   initialDateTime: DateTime.now(),
@@ -221,7 +219,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 35, bottom: 42, right: 35, top: 18),
-                    child: tDiff <= 0
+                    child: model.tDiff <= 0
                         ? ElevatedButton(
                             onPressed: () {},
                             style: ButtonStyle(
