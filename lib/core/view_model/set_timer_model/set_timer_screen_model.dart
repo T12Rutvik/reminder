@@ -58,7 +58,7 @@ class SetTimerViewModel extends BaseModel {
   addData() {
     uid++;
     database.child('reminder').push().set({
-      'title': titleController.text == null ? 'abc' : 'zgdgdg',
+      'title': titleController.text,
       'note': noteController.text,
       'date': selectedDate == null ? DateTime.now().toString().split(' ')[0] : selectedDate.toString().split(' ')[0],
       'time': time == null ? DateTime.now().toString().split(' ')[1].split('.')[0] : time.toString().split(' ')[1].split('.')[0],
@@ -82,7 +82,7 @@ class SetTimerViewModel extends BaseModel {
     });
     print(titleController.text);
     database.child("reminder").child(reminderKey!).update({
-      'title': titleController.text == null ? 'abc' : ' ',
+      'title': titleController.text,
       'note': noteController.text,
       'date': selectedDate == null ? DateTime.now().toString().split(' ')[0] : selectedDate.toString().split(' ')[0],
       'time': time == null ? DateTime.now().toString().split(' ')[1].split('.')[0] : time.toString().split(' ')[1].split('.')[0],

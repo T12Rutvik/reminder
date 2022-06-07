@@ -33,7 +33,15 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               Navigator.pushNamed(
                 context,
                 Routes.setTimerScreen,
-                arguments: ScreenArguments(isUpdate: false),
+                arguments: ScreenArguments(
+                  isUpdate: false,
+                  reminderTitle: '',
+                  reminderNote: '',
+                  reminderDate: DateTime.now().toString().split(" ")[0],
+                  reminderTime: DateTime.now().toString().split(' ')[1],
+                  /*reminderTime: model.reminderList.elementAt(index).date.toString(),
+                  reminderDate: DateTime.now().toString(),*/
+                ),
               );
             },
             backgroundColor: const Color(0xFF9d2fc6),
@@ -82,6 +90,12 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                           children: [
                             GestureDetector(
                               onTap: () {
+                                /*print(
+                                  model.reminderList.elementAt(index).date.toString(),
+                                );*/
+                                print(
+                                  model.reminderList.elementAt(index).time.toString(),
+                                );
                                 Navigator.pushNamed(
                                   context,
                                   Routes.setTimerScreen,

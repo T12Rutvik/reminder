@@ -60,16 +60,12 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                       width: 280,
                       child: CupertinoDatePicker(
                         use24hFormat: false,
-                        initialDateTime: DateTime.now(),
+                        initialDateTime: model.time,
                         mode: CupertinoDatePickerMode.time,
                         onDateTimeChanged: (value) {
-                          // print("${model.selectedDate.toString().split(' ')[0]} ${value.toString().split(' ')[1]}");
-                          DateTime tConvert = DateTime.parse("${model.selectedDate.toString().split(' ')[0]} ${value.toString().split(' ')[1]}");
-                          // print("456::${model.time}");
-                          print("789::$tConvert");
-                          tDiff = tConvert.difference(DateTime.now()).inSeconds;
-                          print(tDiff);
                           model.time = value;
+                          DateTime tConvert = DateTime.parse("${model.selectedDate.toString().split(' ')[0]} ${value.toString().split(' ')[1]}");
+                          tDiff = tConvert.difference(DateTime.now()).inSeconds;
                           setState(() {});
                         },
                       ),
@@ -110,11 +106,8 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                                 child: CupertinoDatePicker(
                                   onDateTimeChanged: (value) {
                                     model.selectedDate = value;
-                                    DateTime tConvert = DateTime.parse("${value.toString().split(' ')[0]} ${model..toString().split(' ')[1]}");
-                                    // print("456::${model.time}");
-                                    print("789::$tConvert");
+                                    DateTime tConvert = DateTime.parse("${value.toString().split(' ')[0]} ${model.time.toString().split(' ')[1]}");
                                     tDiff = tConvert.difference(DateTime.now()).inSeconds;
-                                    print(tDiff);
                                     setState(() {});
                                   },
                                   initialDateTime: DateTime.now(),
@@ -349,8 +342,10 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
         model.getData();
         model.titleController.text = widget.screenArguments!.reminderTitle.toString();
         model.noteController.text = widget.screenArguments!.reminderNote.toString();
-        /*model.selectedDate = DateTime.parse(widget.screenArguments!.reminderDate.toString());
-        model.time = DateTime.parse(widget.screenArguments!.reminderDate.toString());*/
+        model.time = DateTime.parse("${widget.screenArguments!.reminderDate.toString()} ${widget.screenArguments!.reminderTime.toString()}");
+        print("000::${model.time}");
+        model.selectedDate = DateTime.parse("${widget.screenArguments!.reminderDate.toString()} ${widget.screenArguments!.reminderTime.toString()}");
+        print("111::${model.selectedDate}");
         model.localNotification();
       },
     );
