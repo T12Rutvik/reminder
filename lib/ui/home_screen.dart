@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:reminder/core/model/home_model.dart';
 import 'package:reminder/core/view_model/base_view.dart';
@@ -92,10 +91,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                               onTap: () {
                                 /*print(
                                   model.reminderList.elementAt(index).date.toString(),
-                                );*/
+                                );
                                 print(
                                   model.reminderList.elementAt(index).time.toString(),
-                                );
+                                );*/
                                 Navigator.pushNamed(
                                   context,
                                   Routes.setTimerScreen,
