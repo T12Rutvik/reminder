@@ -51,12 +51,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               ),
             ),
             backgroundColor: const Color(0xFF9d2fc6),
-            /*actions: const [
-              Icon(Icons.more_vert, size: 30, color: Color(0xFFf8ddf6)),
-              SizedBox(
-                width: 20,
-              ),
-            ],*/
           ),
           body: Padding(
             padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 25.0),
@@ -91,9 +85,15 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                 Navigator.pushNamed(
                                   context,
                                   Routes.setTimerScreen,
-                                  arguments: ScreenArguments(isUpdate: true, reminderId: model.reminderList.elementAt(index).id.toString()),
+                                  arguments: ScreenArguments(
+                                    isUpdate: true,
+                                    reminderId: model.reminderList.elementAt(index).id.toString(),
+                                    reminderDate: model.reminderList.elementAt(index).date.toString(),
+                                    reminderTime: model.reminderList.elementAt(index).time.toString(),
+                                    reminderNote: model.reminderList.elementAt(index).note.toString(),
+                                    reminderTitle: model.reminderList.elementAt(index).title.toString(),
+                                  ),
                                 );
-                                // model.showNotification();
                               },
                               child: Container(
                                 width: double.infinity,

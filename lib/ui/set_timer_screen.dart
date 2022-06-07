@@ -60,12 +60,13 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                       width: 280,
                       child: CupertinoDatePicker(
                         use24hFormat: false,
-                        initialDateTime: DateTime.now().add(const Duration(seconds: 1)),
+                        initialDateTime: DateTime.now(),
                         mode: CupertinoDatePickerMode.time,
                         onDateTimeChanged: (value) {
-                          model.buttonDis = value;
-                          DateTime tConvert = DateTime.parse("${model.selectedDate.toString().split(' ')[0]} ${model.time.toString().split(' ')[1]}");
-                          print(tConvert);
+                          // print("${model.selectedDate.toString().split(' ')[0]} ${value.toString().split(' ')[1]}");
+                          DateTime tConvert = DateTime.parse("${model.selectedDate.toString().split(' ')[0]} ${value.toString().split(' ')[1]}");
+                          // print("456::${model.time}");
+                          print("789::$tConvert");
                           tDiff = tConvert.difference(DateTime.now()).inSeconds;
                           print(tDiff);
                           model.time = value;
@@ -108,12 +109,12 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                                 color: Colors.white,
                                 child: CupertinoDatePicker(
                                   onDateTimeChanged: (value) {
-                                    model.buttonDiss = value;
-                                    DateTime tConvert = DateTime.parse(model.buttonDiss.toString());
-                                    print(tConvert);
-                                    tDiff = tConvert.difference(DateTime.now()).inSeconds;
-                                    print(tDifff);
                                     model.selectedDate = value;
+                                    DateTime tConvert = DateTime.parse("${value.toString().split(' ')[0]} ${model..toString().split(' ')[1]}");
+                                    // print("456::${model.time}");
+                                    print("789::$tConvert");
+                                    tDiff = tConvert.difference(DateTime.now()).inSeconds;
+                                    print(tDiff);
                                     setState(() {});
                                   },
                                   initialDateTime: DateTime.now(),
@@ -227,7 +228,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 35, bottom: 42, right: 35, top: 18),
-                    child: tDiff < 0
+                    child: tDiff <= 0
                         ? ElevatedButton(
                             onPressed: () {},
                             style: ButtonStyle(
@@ -281,7 +282,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                                     Navigator.pop(context);
                                   } else {
                                     model.addData();
-                                    model.fltNotification!.cancelAll();
+                                    // model.fltNotification!.cancelAll();
                                     DateTime tConvert =
                                         DateTime.parse("${model.selectedDate.toString().split(' ')[0]} ${model.time.toString().split(' ')[1]}");
                                     int tDiff = tConvert.difference(DateTime.now()).inSeconds;
@@ -346,6 +347,10 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
       onModelReady: (model) async {
         this.model = model;
         model.getData();
+        model.titleController.text = widget.screenArguments!.reminderTitle.toString();
+        model.noteController.text = widget.screenArguments!.reminderNote.toString();
+        /*model.selectedDate = DateTime.parse(widget.screenArguments!.reminderDate.toString());
+        model.time = DateTime.parse(widget.screenArguments!.reminderDate.toString());*/
         model.localNotification();
       },
     );

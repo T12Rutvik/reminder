@@ -15,9 +15,6 @@ class SetTimerViewModel extends BaseModel {
   DateTime pastDate = DateTime.now();
   bool isButtonActive = true;
 
-  DateTime? buttonDis;
-  DateTime? buttonDiss;
-
   // int dis = int.parse(time!.difference(DateTime.now()).toString());
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -61,7 +58,7 @@ class SetTimerViewModel extends BaseModel {
   addData() {
     uid++;
     database.child('reminder').push().set({
-      'title': titleController.text,
+      'title': titleController.text == null ? 'abc' : 'zgdgdg',
       'note': noteController.text,
       'date': selectedDate == null ? DateTime.now().toString().split(' ')[0] : selectedDate.toString().split(' ')[0],
       'time': time == null ? DateTime.now().toString().split(' ')[1].split('.')[0] : time.toString().split(' ')[1].split('.')[0],
@@ -85,11 +82,11 @@ class SetTimerViewModel extends BaseModel {
     });
     print(titleController.text);
     database.child("reminder").child(reminderKey!).update({
-      'title': titleController.text,
+      'title': titleController.text == null ? 'abc' : ' ',
       'note': noteController.text,
       'date': selectedDate == null ? DateTime.now().toString().split(' ')[0] : selectedDate.toString().split(' ')[0],
       'time': time == null ? DateTime.now().toString().split(' ')[1].split('.')[0] : time.toString().split(' ')[1].split('.')[0],
-      'id': uid.toString(),
+      // 'id': uid.toString(),
     });
     setData();
     updateUI();

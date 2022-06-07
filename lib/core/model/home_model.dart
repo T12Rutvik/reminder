@@ -6,7 +6,6 @@ class ReminderData {
   String? id;
   bool? isSelected;
 
-  // bool isSelected = false;
   ReminderData({
     this.note,
     this.title,
@@ -14,17 +13,23 @@ class ReminderData {
     this.time,
     this.id,
     this.isSelected,
-    // required this.isSelected,
   });
 }
 
 class ScreenArguments {
   bool? isUpdate;
   String? reminderId;
-  // bool? isSelected;
+  String? reminderDate;
+  String? reminderTime;
+  String? reminderNote;
+  String? reminderTitle;
 
   ScreenArguments({
     this.isUpdate,
     this.reminderId,
+    this.reminderDate,
+    this.reminderTime,
+    this.reminderNote,
+    this.reminderTitle,
   });
 }
