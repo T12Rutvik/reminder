@@ -16,8 +16,6 @@ class SetTimerViewModel extends BaseModel {
   bool isButtonActive = true;
   int tDiff = 0;
 
-  // int dis = int.parse(time!.difference(DateTime.now()).toString());
-
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   var uid = 0;
   var uuid = const Uuid();
@@ -36,7 +34,6 @@ class SetTimerViewModel extends BaseModel {
   DateTime time = DateTime.now();
 
   //
-  bool isOn = false;
   DateFormat formatter = DateFormat.yMMMMd('en_US');
 
   //
